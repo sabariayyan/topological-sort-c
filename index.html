@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topological Sort Visualizer – Data Structures in C</title>
+  <meta name="description" content="Interactive educational platform to learn, build, and visualize Topological Sort on Directed Acyclic Graphs (DAG) implemented in C programming.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">TS</div>
+        <div class="brand-title">
+          Topological Sort
+          <span>Data Structures in C</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link active">🏠 Home</a></li>
+        <li><a href="learn.html" class="nav-link">📖 Learn</a></li>
+        <li><a href="visualizer.html" class="nav-link">⚡ Graph Builder & Visualizer</a></li>
+        <li><a href="c-program.html" class="nav-link">💻 C Program</a></li>
+        <li><a href="practice.html" class="nav-link">✍️ Practice & Quiz</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+        <button class="mobile-toggle" aria-label="Toggle Mobile Menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-content">
+      <span class="section-tag">🎓 College Data Structures & Algorithms</span>
+      <h1 class="hero-title">
+        Master <span class="gradient-text">Topological Sort</span> in C Programming
+      </h1>
+      <p class="hero-subtitle">
+        An interactive visual platform designed for computer science students to build Directed Acyclic Graphs (DAGs), trace in-degree reductions step by step, detect cycles, and understand production-ready C implementations.
+      </p>
+
+      <div class="hero-cta">
+        <a href="visualizer.html" class="btn btn-primary btn-lg">⚡ Start Visualization</a>
+        <a href="learn.html" class="btn btn-secondary btn-lg">📖 Learn Topological Sort</a>
+        <a href="c-program.html" class="btn btn-outline btn-lg">💻 View C Program</a>
+      </div>
+    </div>
+
+    <!-- Live Preview Interactive Showcase -->
+    <div class="hero-preview">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+        <span style="font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+          <span style="color: var(--primary);">●</span> Interactive DAG Example: A → B, A → C, B → D, C → D
+        </span>
+        <span class="badge badge-ready">DAG Validated</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; text-align: left; align-items: center;">
+        <div style="background: var(--bg-canvas); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: center;">
+          <svg viewBox="0 0 360 160" style="width: 100%; height: auto; max-height: 140px;">
+            <defs>
+              <marker id="hero-arrow" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--primary)" />
+              </marker>
+            </defs>
+            <!-- Edges -->
+            <path d="M 50 80 L 140 40" stroke="var(--primary)" stroke-width="2.5" marker-end="url(#hero-arrow)" />
+            <path d="M 50 80 L 140 120" stroke="var(--primary)" stroke-width="2.5" marker-end="url(#hero-arrow)" />
+            <path d="M 140 40 L 230 80" stroke="var(--primary)" stroke-width="2.5" marker-end="url(#hero-arrow)" />
+            <path d="M 140 120 L 230 80" stroke="var(--primary)" stroke-width="2.5" marker-end="url(#hero-arrow)" />
+            <path d="M 230 80 L 310 80" stroke="var(--primary)" stroke-width="2.5" marker-end="url(#hero-arrow)" />
+            
+            <!-- Nodes -->
+            <g transform="translate(50, 80)">
+              <circle r="18" fill="rgba(56,189,248,0.2)" stroke="var(--primary)" stroke-width="2.5" />
+              <text text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold" font-size="13">A</text>
+            </g>
+            <g transform="translate(140, 40)">
+              <circle r="18" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2.5" />
+              <text text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold" font-size="13">B</text>
+            </g>
+            <g transform="translate(140, 120)">
+              <circle r="18" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2.5" />
+              <text text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold" font-size="13">C</text>
+            </g>
+            <g transform="translate(230, 80)">
+              <circle r="18" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2.5" />
+              <text text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold" font-size="13">D</text>
+            </g>
+            <g transform="translate(310, 80)">
+              <circle r="18" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2.5" />
+              <text text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold" font-size="13">E</text>
+            </g>
+          </svg>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            Order: <strong style="color: var(--color-done);">A → B → C → D → E</strong> or <strong style="color: var(--color-done);">A → C → B → D → E</strong>
+          </div>
+        </div>
+
+        <div>
+          <div class="concept-box" style="margin: 0 0 1rem 0;">
+            <h4>📌 What is Topological Sorting?</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              A linear ordering of vertices in a <strong>Directed Acyclic Graph (DAG)</strong> such that for every directed edge <code>u → v</code>, vertex <code>u</code> comes before <code>v</code>.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <a href="visualizer.html" class="btn btn-primary btn-sm">Try Visualizer →</a>
+            <a href="c-program.html" class="btn btn-secondary btn-sm">Inspect C Code</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Core Features & Learning Tracks -->
+  <main class="container">
+    
+    <div class="section-header">
+      <span class="section-tag">Interactive Features</span>
+      <h2 class="section-title">Everything You Need for Data Structures in C</h2>
+      <p class="section-subtitle">A comprehensive suite of interactive tools designed to bridge theory with hands-on C code execution.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <h3 class="card-title">Interactive Graph Builder</h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+          Add vertices and drag directed edges visually on a responsive SVG canvas. Import from plain text or load built-in classic DAG presets.
+        </p>
+        <a href="visualizer.html" class="btn btn-outline btn-sm">Open Graph Builder →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <h3 class="card-title">Step-by-Step Visualization</h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+          Watch Kahn’s queue and in-degree table animate in real time. Step forward, backward, control execution speed, and detect graph cycles.
+        </p>
+        <a href="visualizer.html" class="btn btn-outline btn-sm">Launch Visualizer →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">💻</div>
+        <h3 class="card-title">Synchronized C Code & Simulator</h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+          View clean, commented C code using Adjacency Matrices and Adjacency Lists. Run your own custom graphs in the browser-based C simulator.
+        </p>
+        <a href="c-program.html" class="btn btn-outline btn-sm">Explore C Code →</a>
+      </div>
+    </div>
+
+    <!-- Quick Concept Summary Section -->
+    <div class="card" style="margin-top: 3rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div>
+          <span class="section-tag">Theoretical Foundation</span>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">Core Concepts at a Glance</h3>
+        </div>
+        <a href="learn.html" class="btn btn-secondary btn-sm">Read Full Tutorial 📖</a>
+      </div>
+
+      <div class="grid-2">
+        <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>1.</span> Directed Acyclic Graph (DAG)
+          </h4>
+          <p style="color: var(--text-secondary); font-size: 0.925rem;">
+            A directed graph with no directed cycles. If a cycle exists ($u \to v \to \dots \to u$), no vertex in the cycle can be resolved first because each vertex is a prerequisite for another.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>2.</span> In-degree Reduction (Kahn's Method)
+          </h4>
+          <p style="color: var(--text-secondary); font-size: 0.925rem;">
+            The in-degree of a vertex is the count of incoming edges. Kahn’s algorithm repeatedly removes vertices with in-degree 0, adding them to the linear order and decrementing the in-degrees of their neighbors.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>3.</span> DFS Post-Order Stack Method
+          </h4>
+          <p style="color: var(--text-secondary); font-size: 0.925rem;">
+            Performs Depth-First Search. When all outgoing neighbors of a vertex have been completely visited, the vertex is pushed onto a stack. Popping the stack gives the topological order.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <h4 style="color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>4.</span> Optimal Time & Space Complexity
+          </h4>
+          <p style="color: var(--text-secondary); font-size: 0.925rem;">
+            Using an Adjacency List, Kahn’s Algorithm operates in <strong>O(V + E)</strong> time and <strong>O(V)</strong> auxiliary space, where <em>V</em> is the number of vertices and <em>E</em> is the number of edges.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real World Applications Callout -->
+    <div style="margin-top: 3.5rem;">
+      <div class="section-header">
+        <span class="section-tag">Real World Impact</span>
+        <h2 class="section-title">Why Learn Topological Sort?</h2>
+        <p class="section-subtitle">Topological sorting is the backbone of real-world dependency management engines and task schedulers.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+          <h4 style="margin-bottom: 0.4rem;">Course Prerequisites</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">University degree curricula determining which subjects must be cleared first.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛠️</div>
+          <h4 style="margin-bottom: 0.4rem;">Build Systems (Make)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Compiling C libraries in correct dependency order (e.g. <code>Makefile</code>).</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📦</div>
+          <h4 style="margin-bottom: 0.4rem;">Package Managers</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Resolving library installation hierarchies in <code>npm</code>, <code>apt</code>, and <code>pip</code>.</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+          <h4 style="margin-bottom: 0.4rem;">Task & Job Scheduling</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Workflow automation pipelines where subsequent jobs depend on prior job outputs.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom: 1rem;">
+          <div class="brand-icon">TS</div>
+          <div class="brand-title">
+            Topological Sort
+            <span>Data Structures in C</span>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 320px;">
+          An interactive, college-level computer science educational project for mastering graph algorithms and data structures in C programming.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="learn.html">Learn Theory</a></li>
+          <li><a href="visualizer.html">Graph Builder & Visualizer</a></li>
+          <li><a href="c-program.html">C Programs</a></li>
+          <li><a href="practice.html">Practice & Quiz</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Topics</h5>
+        <ul class="footer-links">
+          <li><a href="learn.html#dag">What is a DAG?</a></li>
+          <li><a href="learn.html#kahns">Kahn's Algorithm</a></li>
+          <li><a href="learn.html#dfs">DFS Method</a></li>
+          <li><a href="learn.html#cycles">Cycle Detection</a></li>
+          <li><a href="learn.html#complexity">Complexity Analysis</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Live Server Ready</h5>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.75rem;">
+          Open in VS Code, right-click <code>index.html</code>, and select <strong>"Open with Live Server"</strong>.
+        </p>
+        <span class="badge badge-ready">Zero Dependencies Required</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>Topological Sort Visualizer &copy; 2026. Data Structures in C.</div>
+      <div>Designed for Computer Science Students & Educators</div>
+    </div>
+  </footer>
+
+  <script src="js/graph.js"></script>
+  <script src="js/topological-sort.js"></script>
+  <script src="js/visualization.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

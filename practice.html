@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice & Quiz – Topological Sort in C</title>
+  <meta name="description" content="Interactive practice questions, self-assessment quizzes, and university exam review for Topological Sort and graph algorithms in C.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">TS</div>
+        <div class="brand-title">
+          Topological Sort
+          <span>Data Structures in C</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="learn.html" class="nav-link">📖 Learn</a></li>
+        <li><a href="visualizer.html" class="nav-link">⚡ Graph Builder & Visualizer</a></li>
+        <li><a href="c-program.html" class="nav-link">💻 C Program</a></li>
+        <li><a href="practice.html" class="nav-link active">✍️ Practice & Quiz</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+        <button class="mobile-toggle" aria-label="Toggle Mobile Menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container-narrow">
+
+    <!-- Page Header -->
+    <div class="section-header">
+      <span class="section-tag">Self-Assessment & Exam Prep</span>
+      <h1 class="section-title">Practice & Test Your Knowledge</h1>
+      <p class="section-subtitle">
+        Test your understanding of in-degree calculations, Kahn’s algorithm mechanics, cycle detection, and common university exam questions.
+      </p>
+    </div>
+
+    <!-- Interactive DAG Sorting Mini Game -->
+    <div id="challengeContainer" style="margin-bottom: 3rem;"></div>
+
+    <!-- Multiple Choice Quiz Section -->
+    <section style="margin-bottom: 3.5rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div>
+          <span class="section-tag">Interactive Quiz</span>
+          <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">Concept Assessment Quiz</h2>
+        </div>
+        <span class="badge badge-ready">7 Questions</span>
+      </div>
+
+      <div id="quizContainer">
+        <!-- Rendered dynamically by main.js -->
+      </div>
+
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <button class="btn btn-primary btn-lg" id="btnSubmitQuiz">📊 Submit & Check Answers</button>
+      </div>
+
+      <div id="quizScoreCard" class="card" style="margin-top: 2rem; display: none; border-color: var(--primary);"></div>
+    </section>
+
+    <!-- University Exam & Interview Q&A Accordion -->
+    <section style="margin-bottom: 3.5rem;">
+      <div style="margin-bottom: 1.5rem;">
+        <span class="section-tag">University Exam Review</span>
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">Standard University Exam Questions & Model Answers</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Click on each question to reveal detailed, exam-ready model answers.</p>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>1. What is a Directed Acyclic Graph (DAG)?</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          A <strong>Directed Acyclic Graph (DAG)</strong> is a directed graph that contains no directed cycles. In other words, for any vertex $v$, there is no directed path starting and ending at $v$. DAGs are fundamental in computer science because they represent prerequisite structures, scheduling constraints, and dependency trees.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>2. What is the in-degree of a vertex in a graph?</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          The <strong>in-degree</strong> of a vertex in a directed graph is the total number of incoming directed edges terminating at that vertex. In a dependency graph, a vertex's in-degree represents the number of prerequisite tasks that must be completed before this vertex can be executed. A vertex with an in-degree of 0 has no prerequisites.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>3. What is Topological Sort?</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          <strong>Topological sorting</strong> is a linear ordering of vertices of a Directed Acyclic Graph (DAG) such that for every directed edge $u \to v$, vertex $u$ appears before vertex $v$ in the ordering. It provides a valid sequential execution order that respects all dependencies.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>4. Why is Cycle Detection required in Topological Sort?</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          Topological sorting is <strong>impossible</strong> for graphs containing cycles (e.g., $A \to B \to C \to A$) because no linear order can satisfy circular dependencies simultaneously ($A$ must precede $B$, $B$ must precede $C$, but $C$ must precede $A$). Cycle detection is required to verify that the graph is indeed a DAG and to report errors if deadlocks or circular dependencies occur.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>5. What is Kahn’s Algorithm and how does it work?</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          <strong>Kahn’s Algorithm</strong> is a BFS-based algorithm for topological sorting:
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li>Calculate the in-degree of every vertex in the graph.</li>
+            <li>Enqueue all vertices with in-degree 0 into a FIFO queue.</li>
+            <li>While the queue is not empty, dequeue vertex $u$ and append it to the topological order.</li>
+            <li>Decrement the in-degrees of all neighbors $v$ of $u$. If any neighbor's in-degree drops to 0, push it into the queue.</li>
+            <li>If the count of ordered vertices equals $V$, sorting succeeds; otherwise, a cycle exists.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>6. What are the Time and Space Complexities of Topological Sort?</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          For a graph with $V$ vertices and $E$ edges using an Adjacency List representation:
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li><strong>Time Complexity:</strong> $O(V + E)$ because each vertex is enqueued/visited once ($O(V)$) and each directed edge is inspected once ($O(E)$).</li>
+            <li><strong>Space Complexity:</strong> $O(V)$ auxiliary space for the in-degree array, queue/stack, and result array.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header">
+          <span>7. Give two real-world applications of Topological Sort.</span>
+          <span>▼</span>
+        </button>
+        <div class="accordion-content">
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li><strong>Build Systems & Compilation:</strong> Tools like <code>Make</code>, <code>CMake</code>, and <code>gcc</code> use topological sort to resolve header file and object file dependencies, ensuring modules are compiled in the correct order.</li>
+            <li><strong>Course Prerequisite Scheduling:</strong> Academic degree planners order prerequisite university courses so students take foundational classes (e.g. Math 1, CS 101) before advanced electives (e.g. Machine Learning).</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom: 1rem;">
+          <div class="brand-icon">TS</div>
+          <div class="brand-title">Topological Sort<span>Data Structures in C</span></div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">An interactive educational project for mastering graph algorithms in C programming.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="learn.html">Learn Theory</a></li>
+          <li><a href="visualizer.html">Visualizer</a></li>
+          <li><a href="c-program.html">C Programs</a></li>
+          <li><a href="practice.html">Practice & Quiz</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Practice Tools</h5>
+        <ul class="footer-links">
+          <li><a href="#challengeContainer">DAG Ordering Game</a></li>
+          <li><a href="#quizContainer">MCQ Quiz</a></li>
+          <li><a href="#accordion">Exam Questions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Live Server</h5>
+        <span class="badge badge-ready">VS Code Live Server Ready</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>Topological Sort Visualizer &copy; 2026. Data Structures in C.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

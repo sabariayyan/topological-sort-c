@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C Program Implementations – Topological Sort in C</title>
+  <meta name="description" content="Clean, well-commented C programs for Topological Sort using Adjacency Matrix, Adjacency List, and DFS methods with an interactive browser-based C simulator.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">TS</div>
+        <div class="brand-title">
+          Topological Sort
+          <span>Data Structures in C</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="learn.html" class="nav-link">📖 Learn</a></li>
+        <li><a href="visualizer.html" class="nav-link">⚡ Graph Builder & Visualizer</a></li>
+        <li><a href="c-program.html" class="nav-link active">💻 C Program</a></li>
+        <li><a href="practice.html" class="nav-link">✍️ Practice & Quiz</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+        <button class="mobile-toggle" aria-label="Toggle Mobile Menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container-narrow">
+
+    <!-- Page Header -->
+    <div class="section-header">
+      <span class="section-tag">C Source Code & Compilation</span>
+      <h1 class="section-title">Topological Sort in C Programming</h1>
+      <p class="section-subtitle">
+        Production-grade, fully commented C source code demonstrating Kahn's in-degree reduction and DFS recursion with memory breakdown and an interactive terminal runner.
+      </p>
+    </div>
+
+    <!-- Code Viewer Card -->
+    <div class="code-container" id="cCodeViewer">
+      <div class="code-header">
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="code-tab-btn active" data-tab="tab-kahns-matrix">Kahn's (Adjacency Matrix)</button>
+          <button class="code-tab-btn" data-tab="tab-kahns-list">Kahn's (Adjacency List)</button>
+          <button class="code-tab-btn" data-tab="tab-dfs">DFS (Stack Method)</button>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btnCopyCode">📋 Copy Code</button>
+      </div>
+
+      <!-- Tab 1: Kahn's Algorithm Adjacency Matrix -->
+      <div class="code-tab-panel code-body" id="tab-kahns-matrix">
+<span class="c-preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="c-preprocessor">#define MAX 100</span>
+
+<span class="c-type">int</span> <span class="c-func">main</span>()
+{
+    <span class="c-type">int</span> n, e;
+    <span class="c-type">int</span> graph[MAX][MAX] = {<span class="c-number">0</span>};
+    <span class="c-type">int</span> indegree[MAX] = {<span class="c-number">0</span>};
+    <span class="c-type">int</span> queue[MAX], front = <span class="c-number">0</span>, rear = <span class="c-number">0</span>;
+    <span class="c-type">int</span> result[MAX], count = <span class="c-number">0</span>;
+
+    <span class="c-func">printf</span>(<span class="c-string">"Enter number of vertices: "</span>);
+    <span class="c-func">scanf</span>(<span class="c-string">"%d"</span>, &amp;n);
+
+    <span class="c-func">printf</span>(<span class="c-string">"Enter number of edges: "</span>);
+    <span class="c-func">scanf</span>(<span class="c-string">"%d"</span>, &amp;e);
+
+    <span class="c-func">printf</span>(<span class="c-string">"Enter edges (u v):\n"</span>);
+
+    <span class="c-keyword">for</span> (<span class="c-type">int</span> i = <span class="c-number">0</span>; i &lt; e; i++)
+    {
+        <span class="c-type">int</span> u, v;
+        <span class="c-func">scanf</span>(<span class="c-string">"%d %d"</span>, &amp;u, &amp;v);
+
+        graph[u][v] = <span class="c-number">1</span>;
+        indegree[v]++;
+    }
+
+    <span class="c-comment">/* Step 1: Find all vertices with in-degree 0 and push to queue */</span>
+    <span class="c-keyword">for</span> (<span class="c-type">int</span> i = <span class="c-number">0</span>; i &lt; n; i++)
+    {
+        <span class="c-keyword">if</span> (indegree[i] == <span class="c-number">0</span>)
+        {
+            queue[rear++] = i;
+        }
+    }
+
+    <span class="c-comment">/* Step 2: Process vertices using FIFO Queue */</span>
+    <span class="c-keyword">while</span> (front &lt; rear)
+    {
+        <span class="c-type">int</span> u = queue[front++];
+        result[count++] = u;
+
+        <span class="c-keyword">for</span> (<span class="c-type">int</span> v = <span class="c-number">0</span>; v &lt; n; v++)
+        {
+            <span class="c-keyword">if</span> (graph[u][v] == <span class="c-number">1</span>)
+            {
+                indegree[v]--;
+
+                <span class="c-keyword">if</span> (indegree[v] == <span class="c-number">0</span>)
+                {
+                    queue[rear++] = v;
+                }
+            }
+        }
+    }
+
+    <span class="c-comment">/* Step 3: Check for cycles */</span>
+    <span class="c-keyword">if</span> (count != n)
+    {
+        <span class="c-func">printf</span>(<span class="c-string">"Cycle detected! Topological sorting is not possible.\n"</span>);
+    }
+    <span class="c-keyword">else</span>
+    {
+        <span class="c-func">printf</span>(<span class="c-string">"Topological Order: "</span>);
+
+        <span class="c-keyword">for</span> (<span class="c-type">int</span> i = <span class="c-number">0</span>; i &lt; count; i++)
+        {
+            <span class="c-func">printf</span>(<span class="c-string">"%d "</span>, result[i]);
+        }
+
+        <span class="c-func">printf</span>(<span class="c-string">"\n"</span>);
+    }
+
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+      </div>
+
+      <!-- Tab 2: Kahn's Algorithm Adjacency List -->
+      <div class="code-tab-panel code-body" id="tab-kahns-list" style="display: none;">
+<span class="c-preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="c-preprocessor">#include &lt;stdlib.h&gt;</span>
+
+<span class="c-keyword">struct</span> Node {
+    <span class="c-type">int</span> dest;
+    <span class="c-keyword">struct</span> Node* next;
+};
+
+<span class="c-keyword">struct</span> Graph {
+    <span class="c-type">int</span> V;
+    <span class="c-keyword">struct</span> Node** adjLists;
+    <span class="c-type">int</span>* indegree;
+};
+
+<span class="c-keyword">struct</span> Node* <span class="c-func">createNode</span>(<span class="c-type">int</span> v) {
+    <span class="c-keyword">struct</span> Node* newNode = <span class="c-func">malloc</span>(<span class="c-keyword">sizeof</span>(<span class="c-keyword">struct</span> Node));
+    newNode-&gt;dest = v;
+    newNode-&gt;next = NULL;
+    <span class="c-keyword">return</span> newNode;
+}
+
+<span class="c-type">void</span> <span class="c-func">addEdge</span>(<span class="c-keyword">struct</span> Graph* graph, <span class="c-type">int</span> src, <span class="c-type">int</span> dest) {
+    <span class="c-keyword">struct</span> Node* newNode = <span class="c-func">createNode</span>(dest);
+    newNode-&gt;next = graph-&gt;adjLists[src];
+    graph-&gt;adjLists[src] = newNode;
+    graph-&gt;indegree[dest]++;
+}
+
+<span class="c-type">void</span> <span class="c-func">topologicalSort</span>(<span class="c-keyword">struct</span> Graph* graph) {
+    <span class="c-type">int</span>* queue = <span class="c-func">malloc</span>(graph-&gt;V * <span class="c-keyword">sizeof</span>(<span class="c-type">int</span>));
+    <span class="c-type">int</span>* result = <span class="c-func">malloc</span>(graph-&gt;V * <span class="c-keyword">sizeof</span>(<span class="c-type">int</span>));
+    <span class="c-type">int</span> front = <span class="c-number">0</span>, rear = <span class="c-number">0</span>, count = <span class="c-number">0</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-type">int</span> i = <span class="c-number">0</span>; i &lt; graph-&gt;V; i++) {
+        <span class="c-keyword">if</span> (graph-&gt;indegree[i] == <span class="c-number">0</span>) {
+            queue[rear++] = i;
+        }
+    }
+
+    <span class="c-keyword">while</span> (front &lt; rear) {
+        <span class="c-type">int</span> u = queue[front++];
+        result[count++] = u;
+
+        <span class="c-keyword">struct</span> Node* temp = graph-&gt;adjLists[u];
+        <span class="c-keyword">while</span> (temp) {
+            <span class="c-type">int</span> v = temp-&gt;dest;
+            graph-&gt;indegree[v]--;
+            <span class="c-keyword">if</span> (graph-&gt;indegree[v] == <span class="c-number">0</span>) {
+                queue[rear++] = v;
+            }
+            temp = temp-&gt;next;
+        }
+    }
+
+    <span class="c-keyword">if</span> (count != graph-&gt;V) {
+        <span class="c-func">printf</span>(<span class="c-string">"Cycle detected!\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-func">printf</span>(<span class="c-string">"Topological Order: "</span>);
+        <span class="c-keyword">for</span> (<span class="c-type">int</span> i = <span class="c-number">0</span>; i &lt; count; i++) {
+            <span class="c-func">printf</span>(<span class="c-string">"%d "</span>, result[i]);
+        }
+        <span class="c-func">printf</span>(<span class="c-string">"\n"</span>);
+    }
+
+    <span class="c-func">free</span>(queue);
+    <span class="c-func">free</span>(result);
+}
+      </div>
+
+      <!-- Tab 3: DFS Method -->
+      <div class="code-tab-panel code-body" id="tab-dfs" style="display: none;">
+<span class="c-preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="c-preprocessor">#include &lt;stdbool.h&gt;</span>
+
+<span class="c-preprocessor">#define MAX 100</span>
+
+<span class="c-type">int</span> graph[MAX][MAX] = {<span class="c-number">0</span>};
+<span class="c-type">int</span> visited[MAX] = {<span class="c-number">0</span>}; <span class="c-comment">// 0: unvisited, 1: visiting, 2: visited</span>
+<span class="c-type">int</span> stack[MAX], top = -<span class="c-number">1</span>;
+<span class="c-type">bool</span> hasCycle = <span class="c-number">false</span>;
+
+<span class="c-type">void</span> <span class="c-func">push</span>(<span class="c-type">int</span> v) {
+    stack[++top] = v;
+}
+
+<span class="c-type">void</span> <span class="c-func">dfs</span>(<span class="c-type">int</span> u, <span class="c-type">int</span> n) {
+    <span class="c-keyword">if</span> (hasCycle) <span class="c-keyword">return</span>;
+    visited[u] = <span class="c-number">1</span>; <span class="c-comment">// Visiting (in call stack)</span>
+
+    <span class="c-keyword">for</span> (<span class="c-type">int</span> v = <span class="c-number">0</span>; v &lt; n; v++) {
+        <span class="c-keyword">if</span> (graph[u][v]) {
+            <span class="c-keyword">if</span> (visited[v] == <span class="c-number">1</span>) {
+                hasCycle = <span class="c-number">true</span>; <span class="c-comment">// Back-edge found!</span>
+                <span class="c-keyword">return</span>;
+            }
+            <span class="c-keyword">if</span> (visited[v] == <span class="c-number">0</span>) {
+                <span class="c-func">dfs</span>(v, n);
+            }
+        }
+    }
+
+    visited[u] = <span class="c-number">2</span>; <span class="c-comment">// Fully processed</span>
+    <span class="c-func">push</span>(u);        <span class="c-comment">// Post-order push</span>
+}
+
+<span class="c-type">int</span> <span class="c-func">main</span>() {
+    <span class="c-type">int</span> n = <span class="c-number">6</span>;
+    <span class="c-comment">// Sample DAG edges</span>
+    graph[<span class="c-number">0</span>][<span class="c-number">1</span>] = <span class="c-number">1</span>; graph[<span class="c-number">0</span>][<span class="c-number">2</span>] = <span class="c-number">1</span>;
+    graph[<span class="c-number">1</span>][<span class="c-number">3</span>] = <span class="c-number">1</span>; graph[<span class="c-number">2</span>][<span class="c-number">3</span>] = <span class="c-number">1</span>;
+    graph[<span class="c-number">3</span>][<span class="c-number">4</span>] = <span class="c-number">1</span>; graph[<span class="c-number">4</span>][<span class="c-number">5</span>] = <span class="c-number">1</span>;
+
+    <span class="c-keyword">for</span> (<span class="c-type">int</span> i = <span class="c-number">0</span>; i &lt; n; i++) {
+        <span class="c-keyword">if</span> (visited[i] == <span class="c-number">0</span>) {
+            <span class="c-func">dfs</span>(i, n);
+        }
+    }
+
+    <span class="c-keyword">if</span> (hasCycle) {
+        <span class="c-func">printf</span>(<span class="c-string">"Cycle detected! Topological sort impossible.\n"</span>);
+    } <span class="c-keyword">else</span> {
+        <span class="c-func">printf</span>(<span class="c-string">"Topological Order: "</span>);
+        <span class="c-keyword">while</span> (top &gt;= <span class="c-number">0</span>) {
+            <span class="c-func">printf</span>(<span class="c-string">"%d "</span>, stack[top--]);
+        }
+        <span class="c-func">printf</span>(<span class="c-string">"\n"</span>);
+    }
+    <span class="c-keyword">return</span> <span class="c-number">0</span>;
+}
+      </div>
+    </div>
+
+    <!-- C Memory & Variable Breakdown -->
+    <div class="card" style="margin-bottom: 3rem;">
+      <h3 class="card-title">🧠 C Variable & Data Structure Breakdown</h3>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.25rem;">
+        Understand how each array and pointer in the C implementation manages memory:
+      </p>
+
+      <div class="grid-2">
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 3px solid var(--primary);">
+          <code style="color: var(--primary); font-weight: bold;">graph[MAX][MAX]</code>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+            2D integer matrix where <code>graph[u][v] = 1</code> indicates a directed edge from vertex <code>u</code> to <code>v</code>.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 3px solid var(--primary);">
+          <code style="color: var(--primary); font-weight: bold;">indegree[MAX]</code>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+            1D array tracking unresolved prerequisite dependencies for every vertex.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 3px solid var(--color-queue);">
+          <code style="color: var(--color-queue); font-weight: bold;">queue[MAX], front, rear</code>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+            Linear array-based FIFO queue storing vertices currently ready with in-degree 0.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 3px solid var(--color-done);">
+          <code style="color: var(--color-done); font-weight: bold;">result[MAX], count</code>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+            Output array holding the finalized linear topological ordering.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Browser C Terminal Simulator -->
+    <div class="card" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 class="card-title">⚡ Interactive Browser C Simulator</h3>
+        <span class="badge badge-ready">Simulated GCC Environment</span>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Enter custom graph input parameters to test standard C program I/O and trace execution in real-time.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Vertices (N):</label>
+          <input type="number" id="simVertices" value="6" min="1" max="20" class="btn btn-secondary" style="width: 100%; text-align: left;">
+        </div>
+        <div>
+          <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Edges (E):</label>
+          <input type="number" id="simEdgesCount" value="6" min="0" max="40" class="btn btn-secondary" style="width: 100%; text-align: left;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Directed Edges (u v per line):</label>
+        <textarea id="simEdgesData" rows="6" class="btn btn-secondary" style="width: 100%; text-align: left; font-family: var(--font-mono); font-size: 0.85rem; resize: vertical;">0 1
+0 2
+1 3
+2 3
+3 4
+4 5</textarea>
+      </div>
+
+      <button class="btn btn-primary" id="runTerminalBtn" style="margin-bottom: 1.5rem;">▶ Run C Program in Terminal</button>
+
+      <!-- Simulated Terminal Box -->
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-dot dot-red"></div>
+          <div class="terminal-dot dot-yellow"></div>
+          <div class="terminal-dot dot-green"></div>
+          <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 0.5rem;">c_runtime_console – topological_sort</span>
+        </div>
+        <div class="terminal-body" id="terminalOutput">$ gcc topological_sort_kahn.c -o topo_sort
+$ ./topo_sort
+
+Click "Run C Program in Terminal" above to execute...</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom: 1rem;">
+          <div class="brand-icon">TS</div>
+          <div class="brand-title">Topological Sort<span>Data Structures in C</span></div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">An interactive educational project for mastering graph algorithms in C programming.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="learn.html">Learn Theory</a></li>
+          <li><a href="visualizer.html">Visualizer</a></li>
+          <li><a href="c-program.html">C Programs</a></li>
+          <li><a href="practice.html">Practice & Quiz</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>C Topics</h5>
+        <ul class="footer-links">
+          <li><a href="#tab-kahns-matrix">Adjacency Matrix</a></li>
+          <li><a href="#tab-kahns-list">Adjacency List</a></li>
+          <li><a href="#tab-dfs">DFS Recursion</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Live Server</h5>
+        <span class="badge badge-ready">VS Code Live Server Ready</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>Topological Sort Visualizer &copy; 2026. Data Structures in C.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

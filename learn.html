@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn Topological Sort – Data Structures in C</title>
+  <meta name="description" content="Comprehensive educational tutorial explaining Graph fundamentals, DAGs, Kahn's algorithm, DFS method, cycle detection, complexities, and applications in C.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">TS</div>
+        <div class="brand-title">
+          Topological Sort
+          <span>Data Structures in C</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="learn.html" class="nav-link active">📖 Learn</a></li>
+        <li><a href="visualizer.html" class="nav-link">⚡ Graph Builder & Visualizer</a></li>
+        <li><a href="c-program.html" class="nav-link">💻 C Program</a></li>
+        <li><a href="practice.html" class="nav-link">✍️ Practice & Quiz</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+        <button class="mobile-toggle" aria-label="Toggle Mobile Menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container-narrow">
+
+    <!-- Page Header -->
+    <div class="section-header">
+      <span class="section-tag">Theory & Algorithms</span>
+      <h1 class="section-title">Complete Guide to Topological Sort</h1>
+      <p class="section-subtitle">
+        Everything you need to understand graphs, in-degree reduction, depth-first search, cycle detection, and data structures in C programming.
+      </p>
+    </div>
+
+    <!-- Quick Table of Contents -->
+    <div class="card" style="margin-bottom: 2.5rem; background: var(--bg-secondary);">
+      <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--primary);">📑 Contents</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; font-size: 0.9rem;">
+        <a href="#intro" style="color: var(--text-secondary); text-decoration: none;">1. Graph Fundamentals & DAGs</a>
+        <a href="#definition" style="color: var(--text-secondary); text-decoration: none;">2. Topological Sort Definition</a>
+        <a href="#kahns" style="color: var(--text-secondary); text-decoration: none;">3. Kahn’s Algorithm (In-degree)</a>
+        <a href="#dfs" style="color: var(--text-secondary); text-decoration: none;">4. DFS Stack Method</a>
+        <a href="#cycles" style="color: var(--text-secondary); text-decoration: none;">5. Cycle Detection in Graphs</a>
+        <a href="#complexity" style="color: var(--text-secondary); text-decoration: none;">6. Complexity Analysis</a>
+        <a href="#applications" style="color: var(--text-secondary); text-decoration: none;">7. Real-World Applications</a>
+        <a href="#pros-cons" style="color: var(--text-secondary); text-decoration: none;">8. Advantages & Disadvantages</a>
+      </div>
+    </div>
+
+    <!-- Section 1: Graph Fundamentals -->
+    <section id="intro" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        1. Graph Fundamentals
+      </h2>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="card-title"><span style="color: var(--primary);">●</span> What is a Graph?</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            A <strong>Graph</strong> is a non-linear data structure consisting of a finite set of vertices (or nodes) $V$ and a set of edges $E$ that connect pairs of vertices. Mathematically: $G = (V, E)$.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title"><span style="color: var(--primary);">●</span> Directed Graph (Digraph)</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            A graph in which every edge has a defined direction, pointing from a source vertex $u$ to a destination vertex $v$, denoted as the ordered pair $(u, v)$ or $u \to v$.
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1.25rem;">
+        <h3 class="card-title"><span style="color: var(--color-done);">★</span> What is a Directed Acyclic Graph (DAG)?</h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+          A <strong>DAG</strong> is a directed graph with <strong>no directed cycles</strong>. This means there is no sequence of directed edges starting at any vertex $v$ that loops back to $v$.
+        </p>
+        <div style="background: var(--bg-canvas); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--color-done);">
+          <strong style="color: var(--text-primary);">Key In-degree & Out-degree Concepts:</strong>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+            <li><strong>In-degree:</strong> The number of incoming edges directed towards a vertex. Represents dependencies to be resolved.</li>
+            <li><strong>Out-degree:</strong> The number of outgoing edges directed away from a vertex. Represents downstream tasks waiting on this vertex.</li>
+            <li><strong>Source Vertex:</strong> A vertex with $\text{in-degree} = 0$ (no incoming prerequisites).</li>
+            <li><strong>Sink Vertex:</strong> A vertex with $\text{out-degree} = 0$ (no outgoing dependencies).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Definition -->
+    <section id="definition" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        2. What is Topological Sort?
+      </h2>
+
+      <div class="definition-quote">
+        “Topological sorting is a linear ordering of vertices of a Directed Acyclic Graph (DAG) such that for every directed edge $u \to v$, vertex $u$ comes before vertex $v$ in the ordering.”
+      </div>
+
+      <p style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.25rem;">
+        If edge $u \to v$ exists, it signifies that task $u$ must be executed before task $v$. Therefore, in the final array/list of sorted vertices, index of $u$ must be strictly smaller than index of $v$.
+      </p>
+
+      <div class="card" style="background: var(--bg-secondary);">
+        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">💡 Important Properties:</h4>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.925rem; line-height: 1.7;">
+          <li>Topological sorting is <strong>only possible for DAGs</strong>. Cyclic graphs have no valid topological ordering.</li>
+          <li>Every DAG has <strong>at least one</strong> topological ordering.</li>
+          <li>A DAG can have <strong>multiple valid</strong> topological orderings if multiple vertices have in-degree 0 at the same stage.</li>
+          <li>The first vertex in any topological sort always has an $\text{in-degree} = 0$.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 3: Kahn's Algorithm -->
+    <section id="kahns" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        3. Kahn’s Algorithm (In-degree Reduction / BFS Queue)
+      </h2>
+
+      <p style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem;">
+        Kahn’s algorithm is a greedy, queue-based BFS algorithm that works by repeatedly picking vertices that have no incoming dependencies ($\text{in-degree} = 0$).
+      </p>
+
+      <div class="card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary);">Detailed Step-by-Step Procedure:</h3>
+        <ol style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8;">
+          <li><strong>Step 1: Calculate In-degree:</strong> Traverse the entire graph and compute the in-degree for every vertex.</li>
+          <li><strong>Step 2: Find Zero In-degree Vertices:</strong> Find all vertices having $\text{in-degree} = 0$.</li>
+          <li><strong>Step 3: Initialize Queue:</strong> Insert all zero in-degree vertices into a FIFO queue.</li>
+          <li><strong>Step 4: Dequeue & Append:</strong> Remove a vertex $u$ from the front of the queue and append it to the topological order result array.</li>
+          <li><strong>Step 5: Decrement Neighbors:</strong> For every adjacent vertex $v$ reachable via directed edge $u \to v$, reduce the in-degree of $v$ by 1 ($\text{indegree}[v]\text{--}$).</li>
+          <li><strong>Step 6: Enqueue Newly Ready Vertices:</strong> If the in-degree of an adjacent vertex $v$ becomes 0, add $v$ to the queue.</li>
+          <li><strong>Step 7: Repeat:</strong> Continue steps 4 to 6 until the queue becomes completely empty.</li>
+          <li><strong>Step 8: Cycle Verification:</strong> If the number of processed vertices in the result array equals the total vertices $N$, return the valid topological order. Otherwise, report a <strong>Cycle Detected</strong>!</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 4: DFS Method -->
+    <section id="dfs" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        4. DFS Method (Post-Order Traversal + Stack)
+      </h2>
+
+      <p style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem;">
+        The DFS approach uses recursion and a LIFO stack. Vertices are pushed onto the stack only after all of their downstream descendant vertices have been fully visited.
+      </p>
+
+      <div class="card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--secondary);">Step-by-Step DFS Algorithm:</h3>
+        <ol style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8;">
+          <li><strong>Step 1:</strong> Initialize a <code>visited[]</code> array with 0 (unvisited) and an empty <code>stack[]</code>.</li>
+          <li><strong>Step 2:</strong> Iterate through all vertices. For any unvisited vertex, invoke <code>DFS(u)</code>.</li>
+          <li><strong>Step 3:</strong> Mark vertex $u$ as visited.</li>
+          <li><strong>Step 4:</strong> For each adjacent unvisited vertex $v$ ($u \to v$), recursively call <code>DFS(v)</code>.</li>
+          <li><strong>Step 5:</strong> After visiting all adjacent vertices (post-order / backtracking phase), push $u$ onto the stack.</li>
+          <li><strong>Step 6:</strong> Once all DFS traversals finish, pop elements one by one from the stack to obtain the final topological order.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 5: Cycle Detection -->
+    <section id="cycles" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        5. Cycle Detection in Directed Graphs
+      </h2>
+
+      <div class="card" style="border-left: 4px solid var(--color-cycle);">
+        <h3 style="color: var(--color-cycle); margin-bottom: 0.75rem;">⚠️ Why are Cycles Impossible to Sort?</h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+          Consider three vertices forming a circular dependency: $A \to B \to C \to A$.<br>
+          - $A$ must precede $B$<br>
+          - $B$ must precede $C$<br>
+          - $C$ must precede $A$<br>
+          This leads to a logical contradiction: $A$ must come before $A$, which is impossible in any linear sequence!
+        </p>
+
+        <div style="background: var(--bg-card-hover); padding: 1.25rem; border-radius: var(--radius-md); text-align: center; margin: 1rem 0;">
+          <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-cycle); font-weight: bold; margin-bottom: 0.5rem;">
+            A → B<br>
+            ↑   ↓<br>
+            └── C
+          </div>
+          <span class="badge badge-cycle">Cycle Detected: Topological Sorting Impossible</span>
+        </div>
+
+        <h4 style="color: var(--text-primary); margin-top: 1rem; margin-bottom: 0.5rem;">How Kahn’s Algorithm Detects Cycles:</h4>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+          In a cyclic graph, nodes participating in the cycle always have an in-degree of at least 1. Their in-degree will never drop to 0, so they are never inserted into the queue. As a result, the algorithm terminates with <code>count != n</code> (processed vertices &lt; total vertices).
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 6: Complexity Analysis -->
+    <section id="complexity" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        6. Time & Space Complexity Analysis
+      </h2>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="card-title">Kahn’s Algorithm</h3>
+          <div style="font-family: var(--font-mono); background: var(--bg-code); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+            <div style="color: var(--primary);">Time Complexity:  O(V + E)</div>
+            <div style="color: var(--color-queue);">Space Complexity: O(V)</div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            <strong>Breakdown:</strong><br>
+            • Initial in-degree calculation: $O(V + E)$<br>
+            • Enqueuing & Dequeuing each vertex once: $O(V)$<br>
+            • Decrementing edges: $O(E)$<br>
+            • <em>Auxiliary Space:</em> $O(V)$ for the queue and in-degree array.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">DFS Method</h3>
+          <div style="font-family: var(--font-mono); background: var(--bg-code); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+            <div style="color: var(--primary);">Time Complexity:  O(V + E)</div>
+            <div style="color: var(--color-queue);">Space Complexity: O(V)</div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            <strong>Breakdown:</strong><br>
+            • Traverses each vertex and edge once: $O(V + E)$<br>
+            • <em>Auxiliary Space:</em> $O(V)$ for the recursion call stack and output stack.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: Applications -->
+    <section id="applications" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        7. Real-World Applications
+      </h2>
+
+      <div class="grid-2">
+        <div class="concept-box">
+          <h4>🎓 1. Course Prerequisite Scheduling</h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">University academic advisory systems use topological sort to ensure students complete prerequisite courses before enrolling in advanced modules.</p>
+        </div>
+
+        <div class="concept-box">
+          <h4>⚙️ 2. Build Systems & Compilers (Make / CMake)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Compilers resolve header and file dependencies to compile source files in the exact sequence needed without missing symbol errors.</p>
+        </div>
+
+        <div class="concept-box">
+          <h4>📦 3. Package Managers (npm, apt, pip)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Installs software packages and their transitive dependencies in safe, non-conflicting order.</p>
+        </div>
+
+        <div class="concept-box">
+          <h4>📊 4. Spreadsheet Formula Evaluation (Excel)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Determines the calculation order of spreadsheet cells when formulas reference other cell values.</p>
+        </div>
+
+        <div class="concept-box">
+          <h4>⚡ 5. Instruction Scheduling in CPUs</h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Reorders assembly and machine instructions to maximize CPU pipelining and minimize pipeline stalls.</p>
+        </div>
+
+        <div class="concept-box">
+          <h4>📅 6. Project Management (PERT / Critical Path)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Orders milestones and subtasks in complex construction and engineering projects.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Pros & Cons -->
+    <section id="pros-cons" style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-primary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+        8. Advantages & Disadvantages
+      </h2>
+
+      <div class="grid-2">
+        <div class="card" style="border-top: 4px solid var(--color-done);">
+          <h3 style="color: var(--color-done); margin-bottom: 0.75rem;">✓ Advantages</h3>
+          <ul style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.925rem; line-height: 1.7;">
+            <li>Extremely efficient with linear time complexity $O(V + E)$.</li>
+            <li>Naturally detects directed cycles and invalid dependencies.</li>
+            <li>Simple and intuitive to implement using basic C queues and arrays.</li>
+            <li>Versatile for solving any precedence-constrained problem.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--color-cycle);">
+          <h3 style="color: var(--color-cycle); margin-bottom: 0.75rem;">✗ Disadvantages & Limitations</h3>
+          <ul style="margin-left: 1.5rem; color: var(--text-secondary); font-size: 0.925rem; line-height: 1.7;">
+            <li>Works strictly with directed graphs; cannot be applied to undirected graphs directly.</li>
+            <li>Cannot produce a valid ordering if the graph has even a single cycle.</li>
+            <li>A graph may have multiple valid topological orders, meaning output order is not unique.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA to Visualizer -->
+    <div class="card" style="text-align: center; background: radial-gradient(circle at 50% 50%, rgba(56,189,248,0.1), transparent);">
+      <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Ready to See it in Action?</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 1.25rem;">Build custom DAGs and watch Kahn's in-degree algorithm step through node by node.</p>
+      <a href="visualizer.html" class="btn btn-primary btn-lg">Launch Interactive Visualizer →</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom: 1rem;">
+          <div class="brand-icon">TS</div>
+          <div class="brand-title">Topological Sort<span>Data Structures in C</span></div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">An interactive educational project for mastering graph algorithms in C programming.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="learn.html">Learn Theory</a></li>
+          <li><a href="visualizer.html">Visualizer</a></li>
+          <li><a href="c-program.html">C Programs</a></li>
+          <li><a href="practice.html">Practice & Quiz</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Algorithm Methods</h5>
+        <ul class="footer-links">
+          <li><a href="#kahns">Kahn's BFS Queue</a></li>
+          <li><a href="#dfs">DFS Post-Order</a></li>
+          <li><a href="#cycles">Cycle Detection</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Live Server</h5>
+        <span class="badge badge-ready">VS Code Live Server Ready</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>Topological Sort Visualizer &copy; 2026. Data Structures in C.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
