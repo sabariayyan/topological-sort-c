@@ -1,5 +1,11 @@
 # Topological Sort Visualizer – Data Structures in C
 
+> 🌐 **Live Demo Website:** **[https://sabariayyan.github.io/topological-sort-c/](https://sabariayyan.github.io/topological-sort-c/)**  
+> 📥 **Download Offline ZIP:** **[topological-sort-c.zip](https://github.com/sabariayyan/topological-sort-c/raw/main/topological-sort-c.zip)**
+
+[![GitHub Pages Deployment](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen?style=for-the-badge&logo=github)](https://sabariayyan.github.io/topological-sort-c/)
+[![Data Structures in C](https://img.shields.io/badge/DSA-C%20Programming-blue?style=for-the-badge&logo=c)](https://sabariayyan.github.io/topological-sort-c/)
+
 An interactive, responsive educational website designed for college **Data Structures and Algorithms (DSA)** students to learn, visualize, and practice **Topological Sorting on Directed Acyclic Graphs (DAG)** using **C programming**.
 
 ---
